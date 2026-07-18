@@ -1,0 +1,6 @@
+{
+  "name": "AWS Route53 Clone",
+  "description": "A high-fidelity full-stack clone of the AWS Route53 console, featuring hosted zones management, dynamic DNS records, and IAM mock authentication.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

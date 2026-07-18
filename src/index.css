@@ -1,0 +1,65 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  /* AWS Console Theme Palette */
+  --color-aws-navy: #161b22;         /* Deepest gray-blue */
+  --color-aws-dark: #232f3e;         /* Standard AWS top nav bar */
+  --color-aws-light: #f2f3f3;        /* Main background of AWS console content */
+  --color-aws-orange: #ff9900;       /* AWS accent orange */
+  --color-aws-orange-hover: #ec7211; /* AWS secondary hover orange */
+  --color-aws-blue: #0073bb;         /* AWS links and call to actions */
+  --color-aws-blue-hover: #005a9e;   /* AWS active/hover links */
+  --color-aws-border: #eaeded;       /* AWS card and grid lines */
+  --color-aws-border-dark: #b8c2cc;  /* Stronger borders */
+  --color-aws-text: #16191f;         /* Primary text */
+  --color-aws-text-muted: #545b64;   /* Secondary/muted text */
+  --color-aws-active: #e2f0fd;       /* Selected row or active item background */
+}
+
+/* Base resets & custom scrollbar styles */
+html, body {
+  background-color: var(--color-aws-light);
+  color: var(--color-aws-text);
+  font-family: var(--font-sans);
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* AWS console style scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* AWS-style layout structure */
+.aws-table-header {
+  background-color: #fafafa;
+  border-bottom: 1.5px solid #eaeded;
+}
+
+/* Custom CSS properties */
+.input-focus-ring {
+  outline: none;
+}
+.input-focus-ring:focus {
+  border-color: var(--color-aws-orange);
+  box-shadow: 0 0 0 1px var(--color-aws-orange);
+}
