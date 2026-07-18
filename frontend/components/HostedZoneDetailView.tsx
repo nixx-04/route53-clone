@@ -264,6 +264,17 @@ export const HostedZoneDetailView: React.FC<HostedZoneDetailViewProps> = ({
       if (!finalValue.startsWith('"') || !finalValue.endsWith('"')) {
         finalValue = `"${finalValue.replace(/"/g, '\\"')}"`; // Autoquote safely
       }
+    } else if (formType === 'PTR') {
+      if (!finalValue) {
+        setFormError('PTR pointer target domain name is required.');
+        return;
+      }
+      // PTR records point to a domain name. Validate it looks like a domain name
+      const domainRegex = /^([a-zA-Z0-9-]+\.)*[a-zA-Z0-9-]+\.[a-zA-Z]{2,}\.?$/;
+      if (!domainRegex.test(finalValue)) {
+        setFormError(`"${finalValue}" is not a valid PTR domain name target (must be a valid domain or host name).`);
+        return;
+      }
     }
 
     setFormLoading(true);
@@ -906,6 +917,7 @@ export const HostedZoneDetailView: React.FC<HostedZoneDetailViewProps> = ({
                     <option value="MX">MX - Routes mail traffic to servers</option>
                     <option value="NS">NS - Name servers authoritative for zone</option>
                     <option value="SOA">SOA - Start of Authority details</option>
+                    <option value="PTR">PTR - Maps an IP address to a domain name (Reverse DNS)</option>
                     <option value="SRV">SRV - Service details (port, priority, etc)</option>
                     <option value="CAA">CAA - Specifies certificate authorities</option>
                   </select>
@@ -1064,6 +1076,8 @@ export const HostedZoneDetailView: React.FC<HostedZoneDetailViewProps> = ({
                           ? 'Enter target canonical domain:\nexample.com'
                           : formType === 'TXT'
                           ? '"v=spf1 include:_spf.google.com ~all"'
+                          : formType === 'PTR'
+                          ? 'Enter target domain name:\nmail.example.com'
                           : 'Enter appropriate record contents...'
                       }
                       rows={4}
@@ -1074,6 +1088,7 @@ export const HostedZoneDetailView: React.FC<HostedZoneDetailViewProps> = ({
                       {formType === 'AAAA' && 'Enter one IPv6 address per line.'}
                       {formType === 'CNAME' && 'Must resolve to another domain name (not an IP).'}
                       {formType === 'TXT' && 'Enclose standard strings inside double quotes.'}
+                      {formType === 'PTR' && 'Must point to a valid domain or host name (e.g., host.example.com).'}
                     </p>
                   </div>
                 )}
