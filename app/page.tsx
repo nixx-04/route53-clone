@@ -1,11 +1,13 @@
+'use client';
+
 import { useEffect, useState } from 'react';
-import { useAuthStore } from './store/authStore';
-import { AWSLogin } from './components/AWSLogin';
-import { AWSLayout } from './components/AWSLayout';
-import { DashboardView } from './components/DashboardView';
-import { HostedZonesView } from './components/HostedZonesView';
-import { HostedZoneDetailView } from './components/HostedZoneDetailView';
-import { ComingSoonView } from './components/ComingSoonView';
+import { useAuthStore } from '@/store/authStore';
+import { AWSLogin } from '@/components/AWSLogin';
+import { AWSLayout } from '@/components/AWSLayout';
+import { DashboardView } from '@/components/DashboardView';
+import { HostedZonesView } from '@/components/HostedZonesView';
+import { HostedZoneDetailView } from '@/components/HostedZoneDetailView';
+import { ComingSoonView } from '@/components/ComingSoonView';
 import { Loader2 } from 'lucide-react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
@@ -19,7 +21,7 @@ const queryClient = new QueryClient({
   },
 });
 
-export default function App() {
+function Route53Console() {
   const { isAuthenticated, loading, checkSession } = useAuthStore();
   const [currentTab, setCurrentTab] = useState('Dashboard');
   const [selectedZoneId, setSelectedZoneId] = useState<number | null>(null);
@@ -29,7 +31,7 @@ export default function App() {
   // Check auth session on application startup
   useEffect(() => {
     checkSession();
-  }, []);
+  }, [checkSession]);
 
   // Update dynamic count of hosted zones for the dashboard widget
   const handleUpdateCount = (count: number) => {
@@ -139,27 +141,33 @@ export default function App() {
   };
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <AWSLayout 
-        currentTab={currentTab} 
-        onTabChange={(tab) => {
-          setCurrentTab(tab);
-          // Reset nested detail sub-view if changing tabs
-          setSelectedZoneId(null);
+    <AWSLayout 
+      currentTab={currentTab} 
+      onTabChange={(tab) => {
+        setCurrentTab(tab);
+        // Reset nested detail sub-view if changing tabs
+        setSelectedZoneId(null);
+        setInitialRecordSearch('');
+      }}
+      onNavigateToZone={(zoneId, initialSearch) => {
+        setCurrentTab('Hosted Zones');
+        setSelectedZoneId(zoneId);
+        if (initialSearch) {
+          setInitialRecordSearch(initialSearch);
+        } else {
           setInitialRecordSearch('');
-        }}
-        onNavigateToZone={(zoneId, initialSearch) => {
-          setCurrentTab('Hosted Zones');
-          setSelectedZoneId(zoneId);
-          if (initialSearch) {
-            setInitialRecordSearch(initialSearch);
-          } else {
-            setInitialRecordSearch('');
-          }
-        }}
-      >
-        {renderMainContent()}
-      </AWSLayout>
+        }
+      }}
+    >
+      {renderMainContent()}
+    </AWSLayout>
+  );
+}
+
+export default function Home() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <Route53Console />
     </QueryClientProvider>
   );
 }
